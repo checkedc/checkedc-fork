@@ -86,15 +86,15 @@ extern void count_exprs(void) {
   // Spot check nt_array_ptr.  This should be treated the same as
   // array_ptr.
 
-  nt_array_ptr<char> t50  _Count(c1) = 0;
-  nt_array_ptr<char> t51  _Count(c2) = 0;
-  nt_array_ptr<char> t52  _Count(c3) = 0;
-  nt_array_ptr<char> t53  _Count(10) = 0;
+  char* _Nt_array t50  _Count(c1) = 0;
+  char* _Nt_array t51  _Count(c2) = 0;
+  char* _Nt_array t52  _Count(c3) = 0;
+  char* _Nt_array t53  _Count(10) = 0;
 
-  nt_array_ptr<char> t54  _Byte_count(c7) = 0;
-  nt_array_ptr<char> t55  _Byte_count(c8) = 0;
-  nt_array_ptr<char> t56  _Byte_count(c9) = 0;
-  nt_array_ptr<char> t57  _Byte_count(A) = 0;
+  char* _Nt_array t54  _Byte_count(c7) = 0;
+  char* _Nt_array t55  _Byte_count(c8) = 0;
+  char* _Nt_array t56  _Byte_count(c9) = 0;
+  char* _Nt_array t57  _Byte_count(A) = 0;
 
 }
 
@@ -425,7 +425,7 @@ extern void bounds_exprs(void) {
    char* _Array t35  _Bounds(char_unchecked_ptr_lb, int_ptr_ub) = (char* _Array) i; // expected-error {{pointer type mismatch}}
 
    // spot check nt_array_ptr with invalid bounds expression
-   nt_array_ptr<char> t40  _Bounds(int_array_ptr_lb, char_array_ptr_ub) = 0;     // expected-error {{pointer type mismatch}}
+   char* _Nt_array t40  _Bounds(int_array_ptr_lb, char_array_ptr_ub) = 0;     // expected-error {{pointer type mismatch}}
 }
 
 //

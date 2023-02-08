@@ -12,7 +12,7 @@ extern void f1() {
   int b[10];
   int p[10];
 
-  int* _Array checkedc_p : bounds(checkedc_p, checkedc_p + 1) = 0;
+  int* _Array checkedc_p  _Bounds(checkedc_p, checkedc_p + 1) = 0;
   a = _Dynamic_bounds_cast<int* _Array>(b, count(10));
   c = _Dynamic_bounds_cast<int>(p); // expected-error {{expected _Ptr or * type}}
 }
@@ -47,9 +47,9 @@ struct S1 {
     int* _Array lower;
     int* _Array upper;
   } pair;
-  int* _Array arr1 : bounds(pair.lower, pair.upper);
+  int* _Array arr1  _Bounds(pair.lower, pair.upper);
   struct {
-    int* _Array arr2 : bounds(pair.lower, pair.upper);
+    int* _Array arr2  _Bounds(pair.lower, pair.upper);
   } nested;
 };
 
@@ -57,16 +57,18 @@ extern void f5() {
   int *p;
   int* _Single q = 0;
   int* _Array r;
-  int* _Array s : bounds(r, r + 5) = 0;
+  int* _Array s  _Bounds(r, r + 5) = 0;
   p = _Assume_bounds_cast<int *>(q);
   p = _Assume_bounds_cast<int *>(s);
 }
 
 extern int* _Array h4(void) : count(3) {
-  int* _Array p : bounds(p, p + 3) = 0;
+  int* _Array p  _Bounds(p, p + 3) = 0;
   return p;
 }
 
+#define _Dymamic_bounds_cast_M(T, e1, ... ) _Dynamic_bounds_cast<T>(e1, __VA_ARGS__)
+#define _Assume_bounds_cast_M(T, e1, ...) _Assume_bounds_cast<T>(e1, __VA_ARGS__)
 extern void f6() {
   int i[2];
   int* _Array int_array_ptr_lb = i, *_Array int_array_ptr_ub = i + 1;
@@ -79,10 +81,10 @@ extern void f6() {
   char *char_unchecked_ptr_lb = (char *)i,
        *char_unchecked_ptr_ub = (char *)i + 1;
 
-  int* _Array t20 : bounds(int_array_ptr_lb, char_array_ptr_ub) = // expected-error {{pointer type mismatch}}
-        _Assume_bounds_cast<int* _Array>(i, bounds(int_array_ptr_lb, char_array_ptr_ub)); // expected-error {{pointer type mismatch}}
+  int* _Array t20  _Bounds(int_array_ptr_lb, char_array_ptr_ub) = // expected-error {{pointer type mismatch}}
+                    _Assume_bounds_cast_M(int* _Array, i, _Bounds(int_array_ptr_lb, char_array_ptr_ub)); // expected-error {{pointer type mismatch}}
 
-  int* _Array t21 : bounds(int_ptr_lb, char_array_ptr_ub) = // expected-error {{pointer type mismatch}}
+  int* _Array t21  _Bounds(int_ptr_lb, char_array_ptr_ub) = // expected-error {{pointer type mismatch}}
         _Assume_bounds_cast<int* _Array>(i, bounds(int_ptr_lb, int_array_ptr_ub));
 }
 
