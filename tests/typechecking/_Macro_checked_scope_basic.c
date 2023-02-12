@@ -15,7 +15,10 @@
 //
 
 #include <stdchecked.h>
-
+#define _Dynamic_bounds_cast_M(T, e1, ... ) _Dynamic_bounds_cast<T>(e1, __VA_ARGS__)
+#define _Dynamic_bounds_cast_M_N(T, e1) _Dynamic_bounds_cast<T>(e1)
+#define _Assume_bounds_cast_M(T, e1, ... ) _Assume_bounds_cast<T>(e1, __VA_ARGS__)
+#define _Assume_bounds_cast_M_N(T, e1) _Assume_bounds_cast<T>(e1)
 #if BOUNDS_ONLY==0
 #define SCOPE_KIND _Checked
 #else
@@ -227,7 +230,7 @@ int KNR_func2(a, b)    // expected-error {{function without a prototype cannot b
 }
 
 int KNR_func3(a, b)    // expected-error {{function without a prototype cannot be used or declared in a checked scope}}
-  ptr<char> a;
+  char*_Single a;
   int* _Single b;
 {
   return 1;
@@ -267,7 +270,7 @@ int b;
 }
 
 int KNR_func6(a, b)
-ptr<char> a;
+char*_Single a;
 int* _Single b;
 {
   return 1;
@@ -276,7 +279,7 @@ int* _Single b;
 #pragma CHECKED_SCOPE ON
 void KNR_test(void) {
   int* _Single px = 0;
-  ptr<char> py = 0;
+  char*_Single py = 0;
   int a,b,c;
   KNR_func4(a,b,c); // expected-error {{function without a prototype cannot be used or declared in a checked scope}}
   KNR_func5(px,a);  // expected-error {{function without a prototype cannot be used or declared in a checked scope}}
@@ -400,7 +403,7 @@ int func29(void) {
         int *a;       // expected-error {{member in a checked scope must have a checked type}}
         char *b;      // expected-error {{member in a checked scope must have a checked type}}
         int* _Single pc;
-        int* _Array pd : count(len);
+        int* _Array pd _Count(len);
         int len;
         short e[10];  // expected-error {{member in a checked scope must have a checked type}}
         int *f : itype(int* _Single);
@@ -413,7 +416,7 @@ int func29(void) {
 void func30(void) {
   int a = 5;
   int len = 10;
-  int* _Array pa : count(len) = 0;
+  int* _Array pa _Count(len) = 0;
   /// checked is a function declaration specifier unless followed by '{' or '['
   checked int len2;   // expected-error {{'_Checked' can only appear on functions}}
   checked [5][5];     // expected-error {{expected identifier}}
@@ -436,7 +439,7 @@ SCOPE_KIND int * func40(int *p, int *q) unchecked {// expected-error {{return in
   return 0;
 }
 
-SCOPE_KIND int * func41(int *p, int* _Single q, int* _Array r, int* _Array s : count(2)) unchecked { // expected-error {{return in a checked scope must have a checked type or a bounds-safe interface}} \
+SCOPE_KIND int * func41(int *p, int* _Single q, int* _Array r, int* _Array s _Count(2)) unchecked { // expected-error {{return in a checked scope must have a checked type or a bounds-safe interface}} \
                                                                                                     // expected-error {{parameter in a checked scope must have a checked type or a bounds-safe interface}}
   int a = 5;
   checked {
@@ -574,7 +577,7 @@ int func49(void) {
         int *a;       // expected-error {{member in a checked scope must have a checked type}}
         char *b;      // expected-error {{member in a checked scope must have a checked type}}
         int* _Single pc;
-        int* _Array pd : count(len);
+        int* _Array pd _Count(len);
         int len;
         short e[10];  // expected-error {{member in a checked scope must have a checked type}}
         char f[10];   // expected-error {{member in a checked scope must have a checked type}}
@@ -585,7 +588,7 @@ int func49(void) {
         int *a;
         char *b;
         int* _Single pc;
-        int* _Array pd : count(len);
+        int* _Array pd _Count(len);
         int len;
         short e[10];
         char f[10];
@@ -612,7 +615,7 @@ unchecked int * func50(int *p, int *q) {
   return 0;
 }
 
-unchecked int * func51(int *p, int* _Single q, int* _Array r, int* _Array s : count(2)) {
+unchecked int * func51(int *p, int* _Single q, int* _Array r, int* _Array s _Count(2)) {
   int a = 5;
   SCOPE_KIND {
     *p = 1; // expected-error {{parameter used in a checked scope must have a checked type or a bounds-safe interface}}
@@ -756,7 +759,7 @@ unchecked int func59(void) {
         int *a;       // expected-error {{member in a checked scope must have a checked type}}
         char *b;      // expected-error {{member in a checked scope must have a checked type}}
         int* _Single pc;
-        int* _Array pd : count(len);
+        int* _Array pd _Count(len);
         int len;
         short e[10];  // expected-error {{member in a checked scope must have a checked type}}
         char f[10];   // expected-error {{member in a checked scope must have a checked type}}
@@ -765,7 +768,7 @@ unchecked int func59(void) {
         int *a;
         char *b;
         int* _Single pc;
-        int* _Array pd : count(len);
+        int* _Array pd _Count(len);
         int len;
         short e[10];
         char f[10];
@@ -781,14 +784,14 @@ struct s0 SCOPE_KIND {
   int *a;     // expected-error {{member in a checked scope must have a checked type}}
   char *b;    // expected-error {{member in a checked scope must have a checked type}}
   int* _Single pc;
-  int* _Array pd : count(len);
+  int* _Array pd _Count(len);
   int *e : itype(int* _Array);
   int len;
   struct s1 {
     int *a;   // expected-error {{member in a checked scope must have a checked type}}
     char *b;  // expected-error {{member in a checked scope must have a checked type}}
     int* _Single pc;
-    int* _Array pd : count(len);
+    int* _Array pd _Count(len);
     int *e : itype(int* _Single);
     int len;
   } d;
@@ -798,14 +801,14 @@ struct s2 {
   int *a;
   char *b;
   int* _Single pc;
-  int* _Array pd : count(len);
+  int* _Array pd _Count(len);
   int *e : itype(int* _Single);
   int len;
   struct s3 {
     int *a;
     char *b;
     int* _Single pc;
-    int* _Array pd : count(len);
+    int* _Array pd _Count(len);
     int *e : itype(int* _Array);
     int len;
   } d;
@@ -1553,27 +1556,27 @@ SCOPE_KIND void check_cast_operator(void) {
   unchecked {
   int *p;
   int* _Single q = 0;
-  int* _Array r : count(5) = 0;
+  int* _Array r _Count(5) = 0;
   SCOPE_KIND {
-  p = _Dynamic_bounds_cast<int *>(q);           // expected-error {{local variable used in a checked scope must have a checked type}} \
+  p = _Dynamic_bounds_cast_M_N(int *, q);           // expected-error {{local variable used in a checked scope must have a checked type}} \
                                                 // expected-error {{type in a checked scope must be a checked pointer or array type}} \
 
-  p = _Dynamic_bounds_cast<int *>(r);           // expected-error {{local variable used in a checked scope must have a checked type}} \
+  p = _Dynamic_bounds_cast_M_N(int *, r);           // expected-error {{local variable used in a checked scope must have a checked type}} \
                                                 // expected-error {{type in a checked scope must be a checked pointer or array type}} \
 
-  q = _Assume_bounds_cast<ptr<int>>(r);             // expected-error {{_Assume_bounds_cast not allowed in a checked scope or function}}
-  r = _Assume_bounds_cast<array_ptr<int>>(r,count(4));     // expected-error {{_Assume_bounds_cast not allowed in a checked scope or function}}
-  r = _Assume_bounds_cast<array_ptr<int>>(r,bounds(r,r+1)); // expected-error {{_Assume_bounds_cast not allowed in a checked scope or function}}
+  q = _Assume_bounds_cast_M_N(ptr<int>, r);             // expected-error {{_Assume_bounds_cast not allowed in a checked scope or function}}
+  r = _Assume_bounds_cast_M(array_ptr<int> , r,count(4));     // expected-error {{_Assume_bounds_cast not allowed in a checked scope or function}}
+  r = _Assume_bounds_cast_M(array_ptr<int> , r,bounds(r,r+1)); // expected-error {{_Assume_bounds_cast not allowed in a checked scope or function}}
 
-  vpa = _Dynamic_bounds_cast<ptr<int(int,...)>>(r);   // expected-error {{type in a checked scope cannot have variable arguments}}
-  vpa = _Dynamic_bounds_cast<ptr<int(int,ptr<int(int, ...)>)>>(r);  // expected-error {{type in a checked scope cannot have variable arguments}}
-  vpa = _Dynamic_bounds_cast<ptr<int*(int,int)>>(r);  // expected-error {{type in a checked scope must use only checked types or parameter/return types with bounds-safe interfaces}}
-  vpa = _Dynamic_bounds_cast<ptr<int(int,ptr<int(int, ...)>, ...)>>(r);  // expected-error {{type in a checked scope cannot have variable arguments}}
+  vpa = _Dynamic_bounds_cast_M_N(ptr<int(int,...)> ,r);   // expected-error {{type in a checked scope cannot have variable arguments}}
+  vpa = _Dynamic_bounds_cast_M_N(ptr<int(int,ptr<int(int, ...)>)> ,r);  // expected-error {{type in a checked scope cannot have variable arguments}}
+  vpa = _Dynamic_bounds_cast_M_N(ptr<int*(int,int)>,r);  // expected-error {{type in a checked scope must use only checked types or parameter/return types with bounds-safe interfaces}}
+  vpa = _Dynamic_bounds_cast_M_N(ptr<int(int,ptr<int(int, ...)>, ...)>, r);  // expected-error {{type in a checked scope cannot have variable arguments}}
 
-  vpa = _Assume_bounds_cast<ptr<int(int,...)>>(r);   // expected-error {{_Assume_bounds_cast not allowed in a checked scope or function}}
-  vpa = _Assume_bounds_cast<ptr<int(int,ptr<int(int, ...)>)>>(r);  // expected-error {{_Assume_bounds_cast not allowed in a checked scope or function}}
-  vpa = _Assume_bounds_cast<ptr<int*(int,int)>>(r);  // expected-error {{_Assume_bounds_cast not allowed in a checked scope or function}}
-  vpa = _Assume_bounds_cast<ptr<int(int,ptr<int(int, ...)>, ...)>>(r);  // expected-error {{_Assume_bounds_cast not allowed in a checked scope or function}}
+  vpa = _Assume_bounds_cast_M_N(ptr<int(int,...)> ,r);   // expected-error {{_Assume_bounds_cast not allowed in a checked scope or function}}
+  vpa = _Assume_bounds_cast_M_N(ptr<int(int,ptr<int(int, ...)>)>, r);  // expected-error {{_Assume_bounds_cast not allowed in a checked scope or function}}
+  vpa = _Assume_bounds_cast_M_N(ptr<int*(int,int)> ,r);  // expected-error {{_Assume_bounds_cast not allowed in a checked scope or function}}
+  vpa = _Assume_bounds_cast_M_N(ptr<int(int,ptr<int(int, ...)>, ...)>, r);  // expected-error {{_Assume_bounds_cast not allowed in a checked scope or function}}
   }
   }
 }
@@ -1583,10 +1586,10 @@ SCOPE_KIND void check_cast_operator(void) {
 // unchecked type. To check if a declaration is valid in checked block,
 // we SHOULD check checked pointer type recursively.
 SCOPE_KIND void check_checked_constructed_type(void) {
-  ptr<int*> a = 0;                                  // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
-  array_ptr<ptr<char*>> b : count(5) = 0;           // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
-  array_ptr<ptr<ptr<ptr<int*>>>> c : count(10) = 0; // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
-  ptr<ptr<ptr<int*>>> d = 0;                        // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
+  int**_Single a = 0;                                  // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
+  char**_Single*_Array b _Count(5) = 0;           // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
+  int** _Single * _Single * _Single * _Array c _Count(10) = 0; // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
+  int**_Single*_Single*_Single d = 0;                        // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
   int sum = 0;
 
   sum += **a;
@@ -1594,13 +1597,13 @@ SCOPE_KIND void check_checked_constructed_type(void) {
   sum += *****c;
   sum += ****d;
 
-  ptr<int[10]> pa = 0;              // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
-  ptr<int checked[10]> pb = 0;
-  ptr<ptr<int[5]>> pc = 0;          // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
-  array_ptr<ptr<int[5]>> pd = 0;    // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
-  ptr<ptr<int checked[5]>> pe = 0;
-  ptr<ptr<ptr<int[]>>> pf = 0;      // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
-  ptr<ptr<ptr<int checked[]>>> pg = 0;
+  int*_Single pa[10] = 0;              // expected-error {{local variable in a checked scope must have a checked type}}
+  int (* _Single pb) checked[10] = 0;
+  int (*_Single *_Single pc )[5] = 0;          // expected-error {{local variable in a checked scope must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
+  int (*_Single *_Array pd) [5] = 0;    // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
+  int (*_Single *_Single pe) checked[5]= 0;
+  int (*_Single *_Single *_Single pf) [] = 0;      // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
+  int (*_Single *_Single *_Single pg)  checked[] = 0;
 }
 
 int g(ptr<int *> p) {
@@ -1623,23 +1626,23 @@ void check_checked_constructed_type_variadic(void) SCOPE_KIND {
   int* _Single pa = 0;
   int* _Array apa;
 
-  ptr<void(int,int)> a = 0;
-  ptr<int(int,int)> b = 0;
-  ptr<int(int, int* _Single, ...)> c = 0;           // expected-error {{variable in a checked scope cannot have variable arguments}}
-  ptr<int(int, ptr<int(int, ...)>)> d = 0;      // expected-error {{variable in a checked scope cannot have variable arguments}}
-  ptr<int(int, ptr<int(int,int)>, ...)> e = 0;  // expected-error {{variable in a checked scope cannot have variable arguments}}
-  ptr<int(int, ptr<int(int,...)>, ...)> f = 0;  // expected-error {{variable in a checked scope cannot have variable arguments}}
+  void (*_Single a)(int,int) = 0;
+  int (*_Single b)(int,int) = 0;
+  int (*_Single c)(int, int* _Single, ...) = 0;           // expected-error {{variable in a checked scope cannot have variable arguments}}
+  int (*_Single d)(int, int (*_Single)(int, ...)) = 0;      // expected-error {{variable in a checked scope cannot have variable arguments}}
+  int (*_Single e)(int, int (*_Single)(int,int), ...) = 0;  // expected-error {{variable in a checked scope cannot have variable arguments}}
+  int (*_Single f)(int, int (*_Single)(int,...), ...) = 0;  // expected-error {{variable in a checked scope cannot have variable arguments}}
   int (*g)(int, ...);                           // expected-error {{local variable in a checked scope must have a checked type}} //expected-error {{local variable in a checked scope cannot have variable arguments}}
-  ptr<int*(int, int)> h = 0;                    // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
+  int* (*_Single h)(int, int) = 0;                    // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
 
   unchecked {
-    ptr<int(int,...)> var_b = 0;
-    ptr<int(int,int* _Single,...)> var_c = 0;
-    ptr<int(int,ptr<int(int,...)>)> var_d = 0;
-    ptr<int(int,ptr<int(int,int* _Single,...)>, ...)> var_e = 0;
-    ptr<int(int,ptr<int(int,ptr<int(int,...)>)>,ptr<int(int,ptr<int(int,int* _Single,...)>, ...)>,...)> var_f = 0;
+    int (*_Single var_b)(int,...) = 0;
+    int (*_Single var_c)(int,int* _Single,...) = 0;
+    int (*_Single var_d)(int, int (*_Single)(int,...)) = 0;
+    int (*_Single var_e)(int, int (*_Single)(int,int* _Single,...), ...) = 0;
+    int (*_Single var_f)(int,int (*_Single) (int,int (*_Single)(int,...)), int(*_Single)(int, int(*_Single)(int,int* _Single,...), ...),...) = 0;
     int (*g)(int, ...);
-    ptr<int*(int, int)> h = 0;
+    int* (*_Single h)(int, int) = 0;
     (*var_c)(2, pa, pa);
     (*var_d)(3, var_b);
     (*var_e)(4, var_c, var_d);
@@ -1700,17 +1703,17 @@ int* _Single id_checked_intp(int* _Single x) { return 0; }
 
 extern void test_function_pointer(void) SCOPE_KIND {
   // address-of (&) operator produces ptr<T> for function type
-  ptr<int(int)> fn0 = &id_int;
-  ptr<int(int)> fn1 = id_int;
+  int (*_Single fn0)(int) = &id_int;
+  int (*_Single fn1)(int) = id_int;
 
   int (*fn2)(int) = &id_int;   // expected-error {{local variable in a checked scope must have a checked type}}
   int (*fn3)(int) = id_int;  // expected-error {{local variable in a checked scope must have a checked type}}
 
-  ptr<int(int*)> fn4 = &id_intp;   // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
-  ptr<int(int*)> fn5 = id_intp;  // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
+  int (*_Single fn4)(int*) = &id_intp;   // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
+  int (*_Single fn5)(int*) = id_intp;  // expected-error {{must have a pointer, array or function type that uses only checked types or parameter/return types with bounds-safe interfaces}}
 
-  ptr<int* _Single(int* _Single)> fn8 = &id_checked_intp;
-  ptr<int* _Single(int* _Single)> fn9 = id_checked_intp;
+  int* _Single (*_Single fn8)(int* _Single) = &id_checked_intp;
+  int* _Single (*_Single fn9)(int* _Single) = id_checked_intp;
 
   int val0;
   // address-of (&) operator produces array_ptr<T> except for function type
@@ -1731,44 +1734,44 @@ extern void test_cast_to_nt_array_ptr(void) checked {
 
   // Test casting ptr to nt_array_ptr.
   int* _Single p0 = (int* _Single)&i;
-  nt_array_ptr<int> p1 = (nt_array_ptr<int>)p0; // expected-error {{'_Ptr<int>' cannot be cast to '_Nt_array_ptr<int>' in a checked scope because '_Ptr<int>' might not point to a null-terminated array}} 
-  ptr<char> p2 = (ptr<char>)&c;
-  nt_array_ptr<char> p3 = (nt_array_ptr<char>)p2; // expected-error {{'_Ptr<char>' cannot be cast to '_Nt_array_ptr<char>' in a checked scope because '_Ptr<char>' might not point to a null-terminated array}} 
-  ptr<char> p4 = "hello";
-  p2 = (nt_array_ptr<char>)p4;  // expected-error {{'_Ptr<char>' cannot be cast to '_Nt_array_ptr<char>' in a checked scope because '_Ptr<char>' might not point to a null-terminated array}}
+  int *_Nt_array p1 = (int *_Nt_array)p0; // expected-error {{'_Ptr<int>' cannot be cast to '_Nt_array_ptr<int>' in a checked scope because '_Ptr<int>' might not point to a null-terminated array}} 
+  char*_Single p2 = (char*_Single)&c;
+  char* _Nt_array p3 = (char* _Nt_array)p2; // expected-error {{'_Ptr<char>' cannot be cast to '_Nt_array_ptr<char>' in a checked scope because '_Ptr<char>' might not point to a null-terminated array}} 
+  char*_Single p4 = "hello";
+  p2 = (char* _Nt_array)p4;  // expected-error {{'_Ptr<char>' cannot be cast to '_Nt_array_ptr<char>' in a checked scope because '_Ptr<char>' might not point to a null-terminated array}}
 
   // Test casting array_ptr to nt_array_ptr.
-  int* _Array p5 : count(5) = arr_i;
-  nt_array_ptr<int> p6 = (nt_array_ptr<int>)arr_i; // expected-error {{'_Array_ptr<int>' cannot be cast to '_Nt_array_ptr<int>' in a checked scope because '_Array_ptr<int>' might not point to a null-terminated array}}
-  p6 = (nt_array_ptr<int>)p5; // expected-error {{'_Array_ptr<int>' cannot be cast to '_Nt_array_ptr<int>' in a checked scope because '_Array_ptr<int>' might not point to a null-terminated array}}
-  array_ptr<char> p7 : count(5) = arr_c;
-  nt_array_ptr<char> p8 = (nt_array_ptr<char>)arr_c; // expected-error {{'_Array_ptr<char>' cannot be cast to '_Nt_array_ptr<char>' in a checked scope because '_Array_ptr<char>' might not point to a null-terminated array}}
-  p8 = (nt_array_ptr<char>)p7; // expected-error {{'_Array_ptr<char>' cannot be cast to '_Nt_array_ptr<char>' in a checked scope because '_Array_ptr<char>' might not point to a null-terminated array}}
+  int* _Array p5 _Count(5) = arr_i;
+  int *_Nt_array p6 = (int *_Nt_array)arr_i; // expected-error {{'_Array_ptr<int>' cannot be cast to '_Nt_array_ptr<int>' in a checked scope because '_Array_ptr<int>' might not point to a null-terminated array}}
+  p6 = (int *_Nt_array)p5; // expected-error {{'_Array_ptr<int>' cannot be cast to '_Nt_array_ptr<int>' in a checked scope because '_Array_ptr<int>' might not point to a null-terminated array}}
+  array_ptr<char> p7 _Count(5) = arr_c;
+  char* _Nt_array p8 = (char* _Nt_array)arr_c; // expected-error {{'_Array_ptr<char>' cannot be cast to '_Nt_array_ptr<char>' in a checked scope because '_Array_ptr<char>' might not point to a null-terminated array}}
+  p8 = (char* _Nt_array)p7; // expected-error {{'_Array_ptr<char>' cannot be cast to '_Nt_array_ptr<char>' in a checked scope because '_Array_ptr<char>' might not point to a null-terminated array}}
 
   // Test casting nt_array_ptr to nt_array_ptr
-  nt_array_ptr<char> p9 = "hello";
-  nt_array_ptr<char> p10 = (nt_array_ptr<char>)p9;  // legal casting
+  char* _Nt_array p9 = "hello";
+  char* _Nt_array p10 = (char* _Nt_array)p9;  // legal casting
 
   // Test casting to nt_array_ptr in a unchecked scope.
   unchecked {
     // Test casting ptr to nt_array_ptr.
-    p1 = (nt_array_ptr<int>)p0;   // allowed here; disallowed in a checked scope.
-    p3 = (nt_array_ptr<char>)p2;  // allowed here; disallowed in a checked scope.
-    p2 = (nt_array_ptr<char>)p4;  // allowed here; disallowed in a checked scope.
+    p1 = (int *_Nt_array)p0;   // allowed here; disallowed in a checked scope.
+    p3 = (char* _Nt_array)p2;  // allowed here; disallowed in a checked scope.
+    p2 = (char* _Nt_array)p4;  // allowed here; disallowed in a checked scope.
   
     // Test casting array_ptr to nt_array_ptr.
-    p6 = (nt_array_ptr<int>)arr_i; // allowed here; disallowed in a checked scope.
-    p6 = (nt_array_ptr<int>)p5;    // allowed here; disallowed in a checked scope.
-    p8 = (nt_array_ptr<char>)p7;   // allowed here; disallowed in a checked scope.
+    p6 = (int *_Nt_array)arr_i; // allowed here; disallowed in a checked scope.
+    p6 = (int *_Nt_array)p5;    // allowed here; disallowed in a checked scope.
+    p8 = (char* _Nt_array)p7;   // allowed here; disallowed in a checked scope.
 
     // Test casting nt_array_ptr to nt_array_ptr
-    p10 = (nt_array_ptr<char>)p9;  // allowed in both checked and unchecked scopes.
+    p10 = (char* _Nt_array)p9;  // allowed in both checked and unchecked scopes.
     
     // Test casting from unchecked pointers to nt_array_ptr.
     int arr_i_unchecked[5];
-    p6 = (nt_array_ptr<int>)arr_i_unchecked;  // allowed
+    p6 = (int *_Nt_array)arr_i_unchecked;  // allowed
     char arr_c_unchecked[5];
-    p8 = (nt_array_ptr<char>)arr_c_unchecked; // allowed
+    p8 = (char* _Nt_array)arr_c_unchecked; // allowed
   }
 }
 
