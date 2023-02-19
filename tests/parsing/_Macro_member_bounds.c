@@ -302,7 +302,7 @@ union U1 {
 // with the same size that are arrays of scalars.
 union U2 {
   int* _Array ip  _Count(4);
-  array_ptr<char> cp  _Count(4 * sizeof(int));
+  char* _Array cp  _Count(4 * sizeof(int));
 };
 
 // Unions where dynamic tags are used to ensure correct use of members.
@@ -327,7 +327,7 @@ struct S32 {
   int len : 31;
   int tag : 1;
   union {
-    array_ptr<char> cp  _Count(tag ? len : 0);
+    char* _Array cp  _Count(tag ? len : 0);
     int* _Array ip  _Count(!tag ? 0 : len);
   };
 };
