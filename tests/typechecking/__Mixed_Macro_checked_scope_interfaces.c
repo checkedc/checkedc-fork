@@ -103,7 +103,7 @@ checked int f7(int *s : bounds(s, s + 4)) {
   return 0;
 }
 
-checked int f8(int *s  _Byte_count(4 * sizeof(int))) {
+checked int f8(int *s  : byte_count(4 * sizeof(int))) {
   int *_Array t1 = s + 3;
   int t2 = *s;
   int t3 = s[3];
@@ -113,7 +113,7 @@ checked int f8(int *s  _Byte_count(4 * sizeof(int))) {
   return 0;
 }
 
-checked int* func10(int *_Single p, int *q  _Itype(int *_Single))  _Itype(int *_Single) {
+checked int* func10(int *_Single p, int *q  _Itype(int *_Single))  _Itype(ptr<int>) {
   int a = 5;
   int *_Single pa = &a;
   int *_Single pb = p;
@@ -124,7 +124,7 @@ checked int* func10(int *_Single p, int *q  _Itype(int *_Single))  _Itype(int *_
 //
 // Globals with simple types
 //
-int *g1  _Itype(int *_Single);
+int *g1  _Itype(ptr<int>);
 int len;
 int *g2  _Count(len);
 int *g3  _Itype(int *_Array);
@@ -153,7 +153,7 @@ checked void test_globals(void) {
 
   // int *_Array with bounds.
   int t11 = *g2;
-  int t12 = *(g2 + 4);
+  int t12 = *(g2 + 4);  
   int t13 = g2[4];
   *(g2 + 4) = 0;
   g2[4] = 0;
@@ -226,7 +226,7 @@ checked int test_call_parameters(void) {
   f14(param1);           // expected-error {{argument does not meet declared bounds for 1st parameter}}
   f14(param2);
   f14(param3);           // expected-error {{argument has unknown bounds}}
-  f14(arr1);
+  f14(arr1);             
   f14(empty_global_arr); // expected-error {{argument has unknown bounds}}
 
   f15(param1, param2);
@@ -236,7 +236,7 @@ checked int test_call_parameters(void) {
 checked void f10a(int *p  _Itype(int *_Single));
 checked void f11a(int *p  _Count(4));
 checked void f11b(int *p : bounds(p, p + 4));
-checked void f11c(int *p  _Byte_count(4 * sizeof(int)));
+checked void f11c(int *p  : byte_count(4 * sizeof(int)));
 checked void f11d(int *lower  _Itype(int *_Array),
                   int *upper  _Itype(int *_Array),
                   int buf : bounds(lower, upper));
@@ -251,11 +251,11 @@ checked void f15a(int *_Single p, int *q  _Itype(int *_Single));
 //
 // Function declarations with bounds-safe interfaces on return values.
 //
-checked int* f20(int a checked[][5], int b checked[][5])  _Itype(int *_Single) {
+checked int* f20(int a checked[][5], int b checked[][5])  _Itype(ptr<int>) {
   return 0;
 }
 
-checked int* f21(int *a  _Itype(int *_Single), int *b  _Itype(int *_Array))  _Itype(int *_Array) checked {
+checked int* f21(int *a  _Itype(ptr<int>), int *b  _Itype(int *_Array))  _Itype(int *_Array) checked {
   int e checked[5][5];
   _Unchecked {
     int *upa = f20(e, e);
@@ -269,7 +269,7 @@ checked int *f21a(int *b  _Count(4))  _Count(4) {
   return b;
 }
 
-checked int *f21b(int *b  _Count(4))  _Byte_count(4 * sizeof(int)) {
+checked int *f21b(int *b  _Count(4))  : byte_count(4 * sizeof(int)) {
   return b;
 }
 
@@ -318,7 +318,7 @@ checked int* f23(int a[]  _Itype(int *), char b[]  _Itype(char *))  _Itype(int *
 
 // Return a ptr from a checked scope for a function with a
 // a bounds-safe interface return type of ptr.
-int *f30(void)  _Itype(int *_Single) {
+int *f30(void)  _Itype(ptr<int>) {
   checked{
     int *_Single p = 0;
   return p;
@@ -366,21 +366,21 @@ int *f34(int len) {
   return 0;
 }
 
-int *f35(int *p  _Itype(int *_Single)) {
+int *f35(int *p  _Itype(ptr<int>)) {
   checked{
     return p; // expected-error {{returning '_Ptr<int>' from a function with incompatible result type 'int *'}}
   }
 }
 
 // Omit returning a value when one is expected.
-int *f36(void)  _Itype(int *_Single) {
+int *f36(void)  _Itype(ptr<int>) {
   checked{
     return; // expected-error {{non-void function 'f36' must return a value when there are return bounds}}
   }
   return 0;
 }
 
-// Test returning unchecked values from an unchecked scope for a return with a
+// Test returning unchecked values from an unchecked scope for a return with a 
 // bounds-safe interface type declared in a checked scope.
 
 int ga = 5;
@@ -390,7 +390,7 @@ checked int * func37(void)  _Itype(int *_Array) _Unchecked {
    return upa;
 }
 
-checked int * func38(void)  _Itype(int *_Single) _Unchecked {
+checked int * func38(void)  _Itype(ptr<int>) _Unchecked {
   int *upa = &ga;
   checked{
     _Unchecked {
@@ -401,7 +401,7 @@ checked int * func38(void)  _Itype(int *_Single) _Unchecked {
 
 #pragma CHECKED_SCOPE ON
 struct S1 {
-  int *f1  _Itype(int *_Single);
+  int *f1  _Itype(ptr<int>);
   int *f2  _Count(5);
   int *f3  _Count(len);
   int *f4 : bounds(f5, f5 + 5);  // use of f5 here is intentional.
@@ -410,8 +410,8 @@ struct S1 {
   int *f6  _Itype(int *_Array);
 
   int arr[5]  _Itype(int checked[5]);
-  void ((*fp1)(int *param  _Itype(int *_Single))) :
-    itype(ptr<void(int *param  _Itype(int *_Single))>);
+  void ((*fp1)(int *param  _Itype(ptr<int>))) :
+    itype(ptr<void(int *param  _Itype(ptr<int>))>);
 };
 #pragma CHECKED_SCOPE OFF
 
@@ -453,7 +453,7 @@ int test_struct2(struct S1 *p  _Itype(ptr<struct S1>)) {
 // Bounds-safe interfaces for checked pointers to checked pointers.
 
 checked int f50(int **s  _Itype(ptr<int *_Single>)) {
-  int *_Single t1 = *s;  // Allowed in checked scope.
+  ptr<int> t1 = *s;  // Allowed in checked scope.
   int t2 = **s;       // Allowed in checked scope
   int t3 = *(s + 5);  // expected-error {{arithmetic on _Ptr type}}
   int t4 = s[5];      // expected-error {{subscript of '_Ptr<_Ptr<int>>'}}
@@ -491,7 +491,7 @@ checked void test_function_pointer_parameter(callback_fn1 fn) {
 // Make sure that bounds-safe interfaces on returns are used when
 // checking function pointers in checked scopes
 
-typedef ptr<int *(void)  _Itype(int *_Single)> callback_fn2;
+typedef ptr<int *(void)  _Itype(ptr<int>)> callback_fn2;
 
 checked void test_function_return_of_ptr(callback_fn2 fn) {
   int *_Single p = (*fn)();
@@ -516,7 +516,7 @@ checked void test_function_pointer_return(void) {
 // Test call through a function pointer with a bounds-safe interface,
 // where the return type is a pointer to a pointer.
 struct S2 {
-  int *f1  _Itype(int *_Single);
+  int *f1  _Itype(ptr<int>);
   int *f2  _Count(5);
   int *f3  _Count(len);
   int len;
@@ -527,8 +527,8 @@ struct S2 {
     itype(int *_Single *_Single (*_Single)(int *param  _Itype(int *_Single)));
 
   // pointer to function that returns an array_ptr<int *_Single>
-  int **((*fp2)(int *param  _Itype(int *_Single),int len)) :
-    itype(ptr<array_ptr<int *_Single>(int *param  _Itype(int *_Single), int len)  _Count(len)>);
+  int **((*fp2)(int *param  _Itype(ptr<int>),int len)) :
+    itype(ptr<array_ptr<int *_Single>(int *param  _Itype(ptr<int>), int len)  _Count(len)>);
 };
 
 checked int test_struct3(struct S2 *p  _Itype(ptr<struct S2>)) {
@@ -562,12 +562,12 @@ unchecked int test_struct4(struct S2 *p  _Itype(ptr<struct S2>)) {
 typedef int *(*base_fnptr)(int *, int **j);
 // An unchecked function pointer with bounds-safe interfaces on the parameters and
 // and return type.
-typedef int *(*base_with_interfaces)(int *  _Itype(int *_Single),
-                                     int **j  _Itype(ptr<int *_Single>))  _Itype(int *_Single);
+typedef int *(*base_with_interfaces)(int *  _Itype(ptr<int>),
+                                     int **j  _Itype(ptr<int *_Single>))  _Itype(ptr<int>);
 // A checked function pointer with bounds-safe interfaces on the parameters and
-// return type.   This can be used in a checked scope because the function pointer
+// return type.   This can be used in a checked scope because the function pointer 
 // itself is checked.
-typedef ptr<int *(int *i  _Itype(int *_Single), int **j  _Itype(ptr<int *_Single>))  _Itype(int *_Single)> fnptr_interface;
+typedef ptr<int *(int *i  _Itype(ptr<int>), int **j  _Itype(ptr<int *_Single>))  _Itype(ptr<int>)> fnptr_interface;
 
 // Declare an unchecked array of function pointers and put a bounds-safe interface on it.
 base_fnptr table1[10]  _Itype(fnptr_interface checked[10]);
@@ -604,20 +604,20 @@ unchecked void test2_array_of_function_pointers(int *_Single arg1, ptr<int *_Sin
 // Test some bounds-safe interfaces for real-world library functions.
 
 #define size_t int
-void *checked_aligned_alloc(size_t alignment, size_t size)  _Byte_count(size);
-void *checked_calloc(size_t nmemb, size_t size)  _Byte_count(nmemb * size);
+void *checked_aligned_alloc(size_t alignment, size_t size)  : byte_count(size);
+void *checked_calloc(size_t nmemb, size_t size)  : byte_count(nmemb * size);
 void checked_free(void *pointer  _Itype(ptr<void>));
-void *checked_malloc(size_t size)  _Byte_count(size);
-void *checked_realloc(void *pointer   _Itype(ptr<void>), size_t size)  _Byte_count(size);
+void *checked_malloc(size_t size)  : byte_count(size);
+void *checked_realloc(void *pointer   _Itype(ptr<void>), size_t size)  : byte_count(size);
 
-void *bsearch(const void *key  _Byte_count(size),
-              const void *base  _Byte_count(nmemb * size),
+void *bsearch(const void *key  : byte_count(size),
+              const void *base  : byte_count(nmemb * size),
               size_t nmemb, size_t size,
               int((*compar)(const void *, const void *)) :
               itype(ptr<int(ptr<const void>, ptr<const void>)>)) :
   byte_count(size);
 
-void qsort(void *base  _Byte_count(nmemb * size),
+void qsort(void *base  : byte_count(nmemb * size),
            size_t nmemb, size_t size,
            int((*compar)(const void *, const void *)) :
            itype(ptr<int(ptr<const void>, ptr<const void>)>));
