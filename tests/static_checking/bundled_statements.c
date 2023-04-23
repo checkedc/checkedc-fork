@@ -406,7 +406,7 @@ _Checked {
     }
     for (int j = 0; j < n; j++) {
       _Nt_array_ptr<char> name = group[j].name;
-      unsigned int m = my_strlen(name) _Where name : count(m);
+      unsigned int m = my_strlen(name) _Where (name : count(m));
       if (m >= 2 && name[0] == 'A' && name[1] == 'r')
         return name;
     }
