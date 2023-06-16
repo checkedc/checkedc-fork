@@ -43,46 +43,53 @@ typedef struct _EFI_USB_IO_PROTOCOL EFI_USB_IO_PROTOCOL;
 typedef
 _For_any(T)
 EFI_STATUS
-(EFIAPI *EFI_ASYNC_USB_TRANSFER_CALLBACK)(
-  IN VOID         *Data,
+(EFIAPI * _Single EFI_ASYNC_USB_TRANSFER_CALLBACK)(
+  IN VOID         *Data : byte_count(DataLength),
   IN UINTN        DataLength,
-  IN _Ptr<T>      Context,
+  IN T            * _Single Context,
   IN UINT32       Status
   );
 
 // Make the typedef of a function type for a function that takes an optional
 // callback function and data for the callback function generic.
+//
+// Commented out because it doesn't compile yet.
+
+/*
 typedef
 _For_any(S)
 EFI_STATUS
-(EFIAPI *EFI_USB_IO_ASYNC_ISOCHRONOUS_TRANSFER)(
-  IN EFI_USB_IO_PROTOCOL              *This,
+(EFIAPI * _Single EFI_USB_IO_ASYNC_ISOCHRONOUS_TRANSFER)(
+  IN EFI_USB_IO_PROTOCOL              * _Single This,
   IN UINT8                            DeviceEndpoint,
-  IN OUT VOID                         *Data,
+  IN OUT VOID                         * Data : byte_count(DataLength),
   IN     UINTN                        DataLength,
   // TODO: implement type application of typedefs in compiler
   IN EFI_ASYNC_USB_TRANSFER_CALLBACK<S>  IsochronousCallBack,
-  IN S                             *Context OPTIONAL
+  IN S                             * _Single Context OPTIONAL
   );
+*/
 
-/* The previouos typedef doesn't compile yet.  Uncomment
-   this code and comment it to for a typedef that compilesExpand EFI_ASYNC_USB_TRANSFER_CALLBACK
+// The previous typedef doesn't compile yet.  This version
+// compiles.  It substitutes in the definition of 
+// EFI_ASYNC_USB_TRANSFER_CALLBACK at its use.
 
 typedef
 _For_any(S)
 EFI_STATUS
 (EFIAPI *EFI_USB_IO_ASYNC_ISOCHRONOUS_TRANSFER)(
-  IN EFI_USB_IO_PROTOCOL              *This,
+  IN EFI_USB_IO_PROTOCOL              * _Single This,
   IN UINT8                            DeviceEndpoint,
   IN OUT VOID                         *Data,
   IN     UINTN                        DataLength,
+  // Substitution of EFI_ASYNC_USB_TRANSFER_CALLBACK
   IN _Ptr<EFI_STATUS EFIAPI(
-    IN VOID         *Data,
+    IN VOID         *Data : byte_count(DataLength),
     IN UINTN        DataLength,
-    IN _Ptr<S>      Context,
+    IN S            * _Single Context,
     IN UINT32       Status
    )>  IsochronousCallBack,
-  IN S                             *Context OPTIONAL
+  IN S                             * _Single Context OPTIONAL
   );
-  */
+//  */
 
