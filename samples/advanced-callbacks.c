@@ -77,19 +77,19 @@ EFI_STATUS
 typedef
 _For_any(S)
 EFI_STATUS
-(EFIAPI *EFI_USB_IO_ASYNC_ISOCHRONOUS_TRANSFER)(
+(EFIAPI * _Single EFI_USB_IO_ASYNC_ISOCHRONOUS_TRANSFER)(
   IN EFI_USB_IO_PROTOCOL              * _Single This,
   IN UINT8                            DeviceEndpoint,
   IN OUT VOID                         *Data,
   IN     UINTN                        DataLength,
   // Substitution of EFI_ASYNC_USB_TRANSFER_CALLBACK
-  IN _Ptr<EFI_STATUS EFIAPI(
+  IN  EFI_STATUS (EFIAPI * _Single IsochronousCallBack)(
     IN VOID         *Data : byte_count(DataLength),
     IN UINTN        DataLength,
     IN S            * _Single Context,
     IN UINT32       Status
-   )>  IsochronousCallBack,
+   ),
   IN S                             * _Single Context OPTIONAL
   );
-//  */
+
 
