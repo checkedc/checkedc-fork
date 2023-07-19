@@ -65,7 +65,9 @@ int main(int argc, array_ptr<char*> argv : count(argc)) {
   // clang implementation raises a SIGILL or SIGTRIP when a bounds check fails,
   // dpending on the target OS.  This may change in the future.
   signal(SIGILL, handle_error);
+#if defined(__APPLE__) && defined(__aarch64__)
   signal(SIGTRAP, handle_error);
+#endif
 
   // This makes sure output is not buffered for when
   // we hit errors.
