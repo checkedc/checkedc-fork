@@ -20,7 +20,9 @@ int main(void) {
   // clang implementation raises a SIGILL or SIGTRIP when a bounds check fails,
   // dpending on the target OS.  This may change in the future.
   signal(SIGILL, handle_error);
+#if defined(__APPLE__) && defined(__aarch64__)
   signal(SIGTRAP, handle_error);
+#endif
 
   // This is expected fail at runtime. It is simple enough for clang to issue a warning
   dynamic_check(false); // expected-warning {{dynamic check will always fail}}
