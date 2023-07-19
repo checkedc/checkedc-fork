@@ -5,8 +5,8 @@ There are large amounts of existing critical infrastructure and
 systems software written in C. This software is prone to
 low-level programming errors that lead to security vulnerabilities,
 correctness issues, and reliability problems.  This specification describes
-Version 2 of Checked C, an extension to C designed to help improve the security,
-correctness, and reliability of existing C code.
+Checked C, an extension to C designed to help improve the security and 
+reliability of existing C code.
 }
 
 \vspace{11pt}
@@ -28,8 +28,7 @@ with null-checking and bounds-checking.
 The pointer types
 are layout-compatible with existing pointer
 types, making Checked C code binary-compatible with existing C code.
-Pointer bounds are described using annotations on variable
-declarations that use existing program variables and data.
+Pointer bounds are described using annotations on variable declarations.
 Bounds are checked at runtime before memory accesses.
 Compiler optimizations eliminate unnecessary runtime bounds checking.
 Static checking ensures the correctness of the bounds annotations.}
@@ -50,3 +49,5 @@ safety.  Casts between void pointers and pointers to
 and existential types. This lets many uses of void pointers be replaced
 with type-safe code. Generic type variables are treated as incomplete
 types and only single copies of functions are needed.}
+
+\vspace{11pt}
