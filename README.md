@@ -1,19 +1,19 @@
 # Checked C
 
-Checked C adds static and dynamic checking to C to detect or prevent common programming
-errors such as buffer overruns and out-of-bounds memory accesses.
-The goal of Checked C is to improve systems programming by making fundamental improvements to C.
-This repo contains
-sample code, the  [extension specification](https://github.com/checkedc/checkedc/releases),
-and test code.
+Checked C extends C with bounds checking and improved type safety.  It helps programmers retrofit existing C code to
+be more secure. This repo contains
+the [Checked C specification](https://github.com/checkedc/checkedc/releases),
+sample code, and test code.
 
-- For a quick overview of Checked C, more information, and pointers to example code,
+- For a quick overview of Checked C and pointers to sample code,
   see our [Wiki](https://github.com/checkedc/checkedc/wiki).
-- The PDF of the specification is available [here](https://github.com/checkedc/checkedc/releases).
-- The Checked C fork of LLVM/clang is
-  [here](https://github.com/checkedc/checkedc-llvm-project).
-- The instructions to build and test the Checked C compiler are documented on
-  the [Checked C clang wiki](https://github.com/checkedc/checkedc-llvm-project/wiki).
+- You can download Checked C clang compiler releases for Windows, Mac, and Ubuntu
+  [here](https://github.com/checkedc/checkedc-llvm-project/releases).
+- The specification is available [here](https://github.com/checkedc/checkedc/releases).
+- The repo for the Checked C clang compiler is
+  [here](https://github.com/checkedc/checkedc-llvm-project).  The compiler is a fork of
+  LLVM/clang. The instructions to build the  compiler ffrom source code are on the
+  [Checked C clang wiki](https://github.com/checkedc/checkedc-llvm-project/wiki).
 
 # History
 
@@ -25,7 +25,10 @@ basic language features such as arithmetic across languages.  It also can take a
 have a working system, which does not fit with continuous integration and always having something that
 works.  We decided to pursue an incremental approach.
 
-Researchers from many universities and companies have contributed to Checked C.   Researchers at the University of Maryland, the University of Rochester, the University of Washington, Samsung, Rutgers University, and the University of Pennsylvania have contributed to Checked C.   Apple has proposed a C extension similar to Checked C that relies on more dynamic checking.
+Researchers from many universities and companies have contributed to Checked C.
+Researchers at the University of Maryland, the University of Rochester, the University of Washington, Samsung,
+Rutgers University, and the University of Pennsylvania have contributed to Checked C.
+Apple has proposed a C extension similar to Checked C that relies on more dynamic checking.
 
 # Publications and Presentations
 - There was a [research paper](https://www.microsoft.com/en-us/research/publication/checkedc-making-c-safe-by-extension/) on
@@ -59,7 +62,11 @@ expressions for equivalence.
 
 # Build Status
 
-Automated testing is not currently available.
+[![Checked C Clang CI [Linux]](https://github.com/checkedc/workflows/actions/workflows/check-clang-linux.yml/badge.svg)](https://github.com/checkedc/workflows/actions/workflows/check-clang-linux.yml)
+
+[![Checked C Clang CI [MacOS]](https://github.com/checkedc/workflows/actions/workflows/checkedc-clang-macos.yml/badge.svg)](https://github.com/checkedc/workflows/actions/workflows/checkedc-clang-macos.yml)
+
+[![Checked C Clang CI [WINDOWS]](https://github.com/checkedc/workflows/actions/workflows/check-clang-windows.yml/badge.svg)](https://github.com/checkedc/workflows/actions/workflows/check-clang-windows.yml)
 
 # Participating
 We are happy to have the help. You can contribute by trying out Checked C,
