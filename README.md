@@ -19,7 +19,9 @@ sample code, and test code.
 
 Checked C is an independent open-source project.   It started as a research project at Microsoft in 2015.
 similar to Checked C.  We were looking for a way to improve the security of existing systems software and
-eliminate classes of bugs.  One approach is to rewrite the software in a newer language such as Rust.
+eliminate classes of bugs.
+
+One approach is to rewrite the software in a newer language such as Rust.
 However, rewriting code is challenging for a number of reasons:  it is costly, there are subtle differences in even
 basic language features such as arithmetic across languages, and it can take a long time before you
 have a working system.  Combined, this makes a rewrite a high-risk software development project.  These kinds
@@ -40,9 +42,18 @@ Apple has proposed a C extension similar to Checked C that relies on more dynami
 
 - [C to Checked C by 3C](https://dl.acm.org/doi/10.1145/3527322), by Aravind Machiry, John Kastner, Matt McCutchen, Aaron Eline,
   Kyle Headley, and Michael Hicks. This paper describes the semi-automated 3C tool for converting C to Checked C.
-
-- It [won](https://2022.splashcon.org/details/splash-2022-oopsla/13/C-to-checked-C-by-3c) a SIGPLAN Distinguished Paper award
+  It [won](https://2022.splashcon.org/details/splash-2022-oopsla/13/C-to-checked-C-by-3c) a SIGPLAN Distinguished Paper award
   at OOPSLA 2022.
+
+- [A Formal Model of Checked C](https://ieeexplore.ieee.org/document/9919657), by Liyi Li, Deena Postol, Leonida
+  Lampropoulos, David Van Horn, and Michael Hicks. This was published in the 2022 IEEE 35th Computer Security Foundations
+  Symposlium. It describe a formal model of Checked C.  The model was formalized using the Coq theorem prover.
+
+- [Achieving Safety Incrementally With Checked C](https://www.microsoft.com/en-us/research/uploads/prod/2019/05/checkedc-post2019.pdf).
+  This was presented at the [2019 Principles of Security and Trust Conference](http://www.etaps.org/2019/post):.
+  This paper describes an early version of 3C that convert existing C code to use Ptr types.  It also proves a blame
+   property about checked regions that shows that checked regions are blameless for any memory corruption.
+  This proof is formalized for a core subset of the language extension.
 
 - [Checked C: Making C Safe by Extension](https://www.microsoft.com/en-us/research/publication/checkedc-making-c-safe-by-extension/) by
   David Tarditi, Samuel Elliott, Andrew Ruef, and Michael Hicks.  This appeared in the
@@ -51,11 +62,6 @@ Apple has proposed a C extension similar to Checked C that relies on more dynami
    The [Wiki](https://github.com/checkedc/checkedc/wiki) and [specification](https://github.com/checkedc/checkedc/releases)
    provide up-to-date descriptions of Checked C.
 
-- [Achieving Safety Incrementally With Checked C](https://www.microsoft.com/en-us/research/uploads/prod/2019/05/checkedc-post2019.pdf).
-  This was presented at the [2019 Principles of Security and Trust Conference](http://www.etaps.org/2019/post):.
-  This paper describes an early version of 3C that convert existing C code to use Ptr types.  It also proves a blame
-   property about checked regions that shows that checked regions are blameless for any memory corruption.
-  This proof is formalized for a core subset of the language extension.
 
 - There was a
 [poster](https://github.com/checkedc/checkedc/blob/main/papers/presentations/llvmdevmeet2019-checkedc_for_memory_safety.pdf)
