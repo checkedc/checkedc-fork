@@ -12,7 +12,7 @@ sample code, and test code.
 - The specification is available [here](https://github.com/checkedc/checkedc/releases).
 - The repo for the Checked C clang compiler is
   [here](https://github.com/checkedc/checkedc-llvm-project).  The compiler is a fork of
-  LLVM/clang. The instructions to build the  compiler ffrom source code are on the
+  LLVM/clang. Instructions for building the compiler from source code are on the
   [Checked C clang wiki](https://github.com/checkedc/checkedc-llvm-project/wiki).
 
 # History
