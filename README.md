@@ -15,6 +15,14 @@ sample code, and test code.
   LLVM/clang. Instructions for building the compiler from source code are on the
   [Checked C clang wiki](https://github.com/checkedc/checkedc-llvm-project/wiki).
 
+# Build Status
+
+[![Checked C Clang CI [Linux]](https://github.com/checkedc/workflows/actions/workflows/check-clang-linux.yml/badge.svg)](https://github.com/checkedc/workflows/actions/workflows/check-clang-linux.yml)
+
+[![Checked C Clang CI [MacOS]](https://github.com/checkedc/workflows/actions/workflows/checkedc-clang-macos.yml/badge.svg)](https://github.com/checkedc/workflows/actions/workflows/checkedc-clang-macos.yml)
+
+[![Checked C Clang CI [WINDOWS]](https://github.com/checkedc/workflows/actions/workflows/check-clang-windows.yml/badge.svg)](https://github.com/checkedc/workflows/actions/workflows/check-clang-windows.yml)
+
 # History
 
 Checked C is an independent open-source project.   It started as a research project at Microsoft in 2015.
@@ -33,13 +41,6 @@ Researchers at the University of Maryland, the University of Rochester, the Univ
 Rutgers University, and the University of Pennsylvania have contributed to Checked C.
 Apple has proposed a C extension similar to Checked C that relies on more dynamic checking.
 
-# Build Status
-
-[![Checked C Clang CI [Linux]](https://github.com/checkedc/workflows/actions/workflows/check-clang-linux.yml/badge.svg)](https://github.com/checkedc/workflows/actions/workflows/check-clang-linux.yml)
-
-[![Checked C Clang CI [MacOS]](https://github.com/checkedc/workflows/actions/workflows/checkedc-clang-macos.yml/badge.svg)](https://github.com/checkedc/workflows/actions/workflows/checkedc-clang-macos.yml)
-
-[![Checked C Clang CI [WINDOWS]](https://github.com/checkedc/workflows/actions/workflows/check-clang-windows.yml/badge.svg)](https://github.com/checkedc/workflows/actions/workflows/check-clang-windows.yml)
 
 # Publications and Presentations
 
