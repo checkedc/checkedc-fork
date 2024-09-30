@@ -1,5 +1,8 @@
 # Checked C
 
+**This was a fork of Checked C used from 2021-2024. The changes have been merged into the
+original [Checked C repo](https://www.github.com/checkedc/checkedc)**
+
 Checked C extends C with bounds checking and improved type safety.  It helps programmers retrofit existing C code to
 be more secure. This repo contains
 the [Checked C specification](https://github.com/checkedc/checkedc/releases),
